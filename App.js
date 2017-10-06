@@ -19,6 +19,7 @@ import LoginForm from './components/login/LoginForm';
 import Firebase from "./components/login/Firebase";
 import * as firebase from "firebase";
 import InterestScreen from './components/registration/InterestsPage'; 
+import BiographyScreen from './components/registration/Biography'; 
 
 
 
@@ -39,6 +40,8 @@ class LoginFormScreen extends Component {
     this.signup = this.signup.bind(this);
     this.login = this.login.bind(this);
   }
+
+
 
   async signup() {
     try {
@@ -73,9 +76,7 @@ class LoginFormScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-
-            <StatusBar barStyle="light-content"/>
-
+            <Button onPress={() => navigate('Interest')} title="INTEREST PAGE" />
             <TextInput style = {styles.input}
                         autoCapitalize="none"
                         onSubmitEditing={() => this.passwordInput.focus()}
@@ -92,14 +93,16 @@ class LoginFormScreen extends Component {
                        onChangeText ={(password) => this.setState({password})}
                        placeholderTextColor='rgba(225,225,225,0.7)'
                        secureTextEntry/>
-             <Button onPress={() => navigate('Interest')} title="INTEREST PAGE" />
           <TouchableOpacity style={styles.buttonContainer} onPress={this.signup}>
                 <Text  style={styles.buttonTextSignUp}>Signup</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonContainer} onPress={this.login}>
                 <Text  style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
-            <Button onPress={() => navigate('Interest')} title="INTEREST PAGE" />
+
+            <TouchableOpacity style={styles.buttonContainerGo}  onPress={() => navigate('Interest')}>
+                <Text  style={styles.buttonText}>GO TO INTEREST PAGE</Text>
+            </TouchableOpacity>
       </View>
     );
   }
@@ -114,7 +117,7 @@ class LoginFormScreen extends Component {
 export const SimpleApp = StackNavigator({
   LoginForm: { screen: LoginFormScreen },
   Interest: { screen: InterestScreen },
-//   Profile: { screen: ProfileScreen },
+  Biography: { screen: BiographyScreen },
 //   Details: { screen: DetailsScreen },
 });
 
@@ -125,6 +128,25 @@ export default class App extends React.Component {
   }
 }
 
+
+// <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+// <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCY8jEbXh9Lkj7yfvxz-e0-7XbZ3iSiTg8",
+    authDomain: "interestesapp.firebaseapp.com",
+    databaseURL: "https://interestesapp.firebaseio.com",
+    projectId: "interestesapp",
+    storageBucket: "interestesapp.appspot.com",
+    messagingSenderId: "505255925049"
+  };
+  firebase.initializeApp(config);
+
+var user = firebase.auth().currentUser;
+if (user != null) {
+  var uid = user.uid;
+  console.log('current user ID: ', uid);
+}
 
 
 const styles = StyleSheet.create({
@@ -144,6 +166,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         backgroundColor: '#2980b6',
+        paddingVertical: 15,
+        marginBottom: 5,
+    },
+    buttonContainerGo:{
+        backgroundColor: '#06b3e2',
         paddingVertical: 15,
         marginBottom: 5,
     },

@@ -3,75 +3,31 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Button ,StyleSheet ,Sta
 import CheckboxFormX from 'react-native-checkbox-form';
 import { StackNavigator } from 'react-navigation';
 
-
-
-
-const mockData = [
-    {
-        label: 'Sports',
-        value: 'two'
-    },
-    {
-        label: 'Politics',
-        value: 'three'
-    },
-    {
-        label: 'Finance',
-        value: 'one'
-    },
-    {
-        label: 'Health',
-        value: 'two'
-    },
-    {
-        label: 'Tech',
-        value: 'one'
-    },
-    //repeat
-    {
-        label: 'Sports',
-        value: 'two'
-    },
-    {
-        label: 'Politics',
-        value: 'three'
-    },
-    {
-        label: 'Finance',
-        value: 'one'
-    },
-    {
-        label: 'Health',
-        value: 'two'
-    },
-    {
-        label: 'Tech',
-        value: 'one'
-    },
-    {
-        label: 'Educat',
-        value: 'three'
-    },
-
-    
-    
-];
+class UselessTextInput extends Component {
+  render() {
+    return (
+      <TextInput
+        {...this.props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
+        editable = {true}
+        maxLength = {40}
+      />
+    );
+  }
+}
  
-export default class InterestsScreen extends Component {
+export default class BiographyScreen extends Component {
   static navigationOptions = {
-    title: 'Interest',
+    title: 'Biography',
   };
 
   _onSelect = ( item ) => {
       console.log(item);
     };
 
-  constructor(props) {
+    constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
-      response: ""
+      text: '',
     };
 
     this.signup = this.signup.bind(this);
@@ -101,26 +57,28 @@ export default class InterestsScreen extends Component {
       const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-          
-            <Text style={styles.title}>INTEREST</Text>
-            <Text style={styles.title}>Choose at least 3 topics:</Text>
-            <View style={styles.CheckboxFormX} >
-              <CheckboxFormX
-                  style={{ width: 350 - 30 }}
-                  dataSource={mockData}
-                  itemShowKey="label"
-                  itemCheckedKey="RNchecked"
-                  iconSize={16}
-                  iconColor='red'
-                  formHorizontal={true}
-                  labelHorizontal={false}
-                  onChecked={(item) => this._onSelect(item)}
-              />
-            </View>
+            <Text style={styles.title}>Tell us about yourself</Text>
+            
 
-            <TouchableOpacity style={styles.buttonContainer}  onPress={() => navigate('Biography')}>
+            <View style={{
+               backgroundColor: '#ccf0f9',
+               borderColor: '#000000',
+               borderWidth: 1,
+               height: 80,
+               borderBottomWidth: 1 }}
+             >
+               <UselessTextInput
+                 multiline = {true}
+                 numberOfLines = {4}
+                 onChangeText={(text) => this.setState({text})}
+                 value={this.state.text}
+               />
+             </View>
+
+             <TouchableOpacity style={styles.buttonContainer}  onPress={() => navigate('Interest')}>
                 <Text  style={styles.buttonText}>NEXT</Text>
             </TouchableOpacity>
+
           </View>
         );
     }
