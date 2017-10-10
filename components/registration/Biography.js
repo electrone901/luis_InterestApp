@@ -1,64 +1,68 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Button ,StyleSheet ,StatusBar} from 'react-native';
-import CheckboxFormX from 'react-native-checkbox-form';
+import { View, Text, TextInput, TouchableOpacity, Alert, Button ,StyleSheet} from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import Firebase from "../login/Firebase";
+import * as firebase from "firebase";
 
 class UselessTextInput extends Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+        text: ''
+    };
+  }
+
   render() {
     return (
       <TextInput
-        {...this.props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
+        {...this.props} // Inherit any props & passed to it up
         editable = {true}
-        maxLength = {40}
+        maxLength = {250}
       />
     );
   }
 }
  
 export default class BiographyScreen extends Component {
+  
   static navigationOptions = {
     title: 'Biography',
   };
 
-  _onSelect = ( item ) => {
-      console.log(item);
-    };
-
-    constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
-      text: '',
+        text: ''
     };
 
-    this.signup = this.signup.bind(this);
+    this.handlePress = this.handlePress.bind(this);
   }
 
-  // use this to make an ajax call to save input to db
-  async signup() {
-    try {
-      await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
-
-        this.setState({
-            response: "Account Created"
-           
-        });
-
-        alert(this.state.response);
-
-    } catch (error) {
-        this.setState({
-            response: error.toString()
-        })
+  handlePress() {
+    let user = firebase.auth().currentUser;
+    if (user != null){
+      var uid = user.uid;
     }
 
+    let ref = firebase.database().ref(uid);
+    //writes data to Firebase
+    ref.set({
+      bio: this.state.text
+    });   
   }
+
+
+  _onSelect = ( item ) => {
+      console.log(item);
+  };
+
+
 
     render() {
       const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
             <Text style={styles.title}>Tell us about yourself</Text>
-            
 
             <View style={{
                backgroundColor: '#ccf0f9',
@@ -70,12 +74,13 @@ export default class BiographyScreen extends Component {
                <UselessTextInput
                  multiline = {true}
                  numberOfLines = {4}
+                 placeholder="I love hiking!"
                  onChangeText={(text) => this.setState({text})}
                  value={this.state.text}
                />
-             </View>
+            </View>
 
-             <TouchableOpacity style={styles.buttonContainer}  onPress={() => navigate('Interest')}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => this.handlePress()} >
                 <Text  style={styles.buttonText}>NEXT</Text>
             </TouchableOpacity>
 
@@ -89,26 +94,11 @@ const styles = StyleSheet.create({
     container: {
      padding: 20,
      marginBottom: 10,
-
     },
     title:{
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: 20,
-    },
-    input:{
-        height: 40,
-        backgroundColor: 'rgba(225,225,225,0.2)',
-        marginBottom: 10,
-        padding: 10,
-
-    },
-    CheckboxFormX:{
-        height: 180,
-        backgroundColor: 'rgba(225,225,225,0.2)',
-        marginBottom: 10,
-        padding: 10,
-
     },
     buttonContainer:{
         backgroundColor: '#2980b6',
@@ -121,18 +111,6 @@ const styles = StyleSheet.create({
         // fontWeight: '700',
         paddingBottom:10
     },
-    buttonTextSignUp:{
-        color: 'orange',
-        textAlign: 'center',
-        // fontWeight: '700',
-        paddingBottom:10
-    },
-
-    loginButton:{
-      backgroundColor:  '#2980b6',
-       color: '#fff'
-    }
-
 });
 
 

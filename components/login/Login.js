@@ -1,96 +1,96 @@
-import React from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView  } from 'react-native';
-import LoginForm from './LoginForm';
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
+// import React from 'react';
+// import { StyleSheet, Text, View, KeyboardAvoidingView  } from 'react-native';
+// import LoginForm from './LoginForm';
+// class Login extends React.Component {
+//     constructor(props) {
+//         super(props);
     
-        Firebase.initialise();
+//         Firebase.initialise();
     
-        this.getInitialView();
+//         this.getInitialView();
     
-        this.state = {
-          userLoaded: false,
-          initialView: null
-        };
+//         this.state = {
+//           userLoaded: false,
+//           initialView: null
+//         };
     
-        this.getInitialView = this.getInitialView.bind(this);
+//         this.getInitialView = this.getInitialView.bind(this);
     
-      }
+//       }
     
-      getInitialView() {
+//       getInitialView() {
     
-        firebase.auth().onAuthStateChanged((user) => {
+//         firebase.auth().onAuthStateChanged((user) => {
     
-          let initialView = user ? "Home" : "Login";
+//           let initialView = user ? "Home" : "Login";
     
-          this.setState({
-            userLoaded: true,
-            initialView: initialView
-          })
-        });
+//           this.setState({
+//             userLoaded: true,
+//             initialView: initialView
+//           })
+//         });
     
     
-      }
+//       }
     
-      static renderScene(route, navigator) {
+//       static renderScene(route, navigator) {
     
-        switch (route.name) {
+//         switch (route.name) {
     
-          case "Home":
-            return (<Home navigator={navigator} />);
-            break;
+//           case "Home":
+//             return (<Home navigator={navigator} />);
+//             break;
     
-          case "Login":
-            return (<Login navigator={navigator} />);
-            break;
+//           case "Login":
+//             return (<Login navigator={navigator} />);
+//             break;
     
-        }
+//         }
     
-      }
+//       }
     
-      static configureScene(route) {
+//       static configureScene(route) {
     
-        if (route.sceneConfig) {
-          return (route.sceneConfig);
-        } else {
-          return ({
-            ...Navigator.SceneConfigs.HorizontalSwipeJump,
-            gestures: {}
-          });
-        }
+//         if (route.sceneConfig) {
+//           return (route.sceneConfig);
+//         } else {
+//           return ({
+//             ...Navigator.SceneConfigs.HorizontalSwipeJump,
+//             gestures: {}
+//           });
+//         }
     
-      }
+//       }
       
-  render() {
-    return (
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
-            <View style={styles.title}>
-                <Text>
-                    (Interest APP)
-                </Text>
-            </View>
-            <View style={styles.formContainer}>
-                <LoginForm />
-            </View>
-        </KeyboardAvoidingView>
+//   render() {
+//     return (
+//         <KeyboardAvoidingView behavior="padding" style={styles.container}>
+//             <View style={styles.title}>
+//                 <Text>
+//                     (Interest APP)
+//                 </Text>
+//             </View>
+//             <View style={styles.formContainer}>
+//                 <LoginForm />
+//             </View>
+//         </KeyboardAvoidingView>
 
 
-    );
-  }
-}
+//     );
+//   }
+// }
 
-const styles = StyleSheet.create({
-    container: {
-            flex: 1,
-            backgroundColor: '#3498db',
-        },
-        title:{
-            alignItems: 'center',
-            flexGrow: 1,
-            justifyContent: 'center'
+// const styles = StyleSheet.create({
+//     container: {
+//             flex: 1,
+//             backgroundColor: '#3498db',
+//         },
+//         title:{
+//             alignItems: 'center',
+//             flexGrow: 1,
+//             justifyContent: 'center'
 
-        }
-});
+//         }
+// });
 
-export default Login;
+// export default Login;

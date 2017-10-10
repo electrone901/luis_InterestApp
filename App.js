@@ -1,3 +1,4 @@
+// NOTE: LOGIN AND LoginForm ARE NOT USE FOR THIS PROJECT
 import React, { Component } from 'react';
 import {
   Platform,
@@ -15,8 +16,6 @@ import { StackNavigator } from 'react-navigation';
 
 
 // IMPORT COMPONENTS
-import LoginForm from './components/login/LoginForm';
-import Firebase from "./components/login/Firebase";
 import * as firebase from "firebase";
 import InterestScreen from './components/registration/InterestsPage'; 
 import BiographyScreen from './components/registration/Biography'; 
@@ -46,29 +45,38 @@ class LoginFormScreen extends Component {
   async signup() {
     try {
         await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
-
+        //send userId to the user table to create a new node within the user table, the new node will hold the userid ex: id: 234 everytime to fill this 
         this.setState({
             response: "Account Created"
         });
-        alert(this.state.response);
+        
     } catch (error) {
         this.setState({
             response: error.toString()
         })
+    } finally {
+      alert(this.state.response);
     }
   }
 
   async login() {
+    const { navigate } = this.props.navigation;
+  
+
     try {
         await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
         this.setState({
             response: "Logged In!"
         });
-        alert(this.state.response)
+        // console.log(this.state.response)
+        let runThis = () => navigate('Interest');
+        runThis();
     } catch (error) {
         this.setState({
             response: error.toString()
         })
+    } finally {
+      alert(this.state.response);
     }
   }
 
@@ -118,7 +126,6 @@ export const SimpleApp = StackNavigator({
   LoginForm: { screen: LoginFormScreen },
   Interest: { screen: InterestScreen },
   Biography: { screen: BiographyScreen },
-//   Details: { screen: DetailsScreen },
 });
 
 
@@ -129,8 +136,6 @@ export default class App extends React.Component {
 }
 
 
-// <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
-// <script>
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyCY8jEbXh9Lkj7yfvxz-e0-7XbZ3iSiTg8",
@@ -153,9 +158,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#3498db',
-     // padding: 20,
-     // marginBottom: 10,
-
     },
     input:{
         height: 40,

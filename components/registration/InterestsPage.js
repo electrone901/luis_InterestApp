@@ -3,9 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Button ,StyleSheet ,Sta
 import CheckboxFormX from 'react-native-checkbox-form';
 import { StackNavigator } from 'react-navigation';
 
-
-
-
 const mockData = [
     {
         label: 'Sports',
@@ -63,7 +60,9 @@ export default class InterestsScreen extends Component {
   };
 
   _onSelect = ( item ) => {
-      console.log(item);
+      //console.log("item CHECK:", item);
+      console.log("this.mockData.value.RNchecked:", item.RNchecked);
+      // Interest1: this.mockData.value.RNchecked;
     };
 
   constructor(props) {
@@ -74,55 +73,51 @@ export default class InterestsScreen extends Component {
       response: ""
     };
 
-    this.signup = this.signup.bind(this);
+    // this.signup = this.signup.bind(this);
   }
 
-  // use this to make an ajax call to save input to db
-  async signup() {
-    try {
-      await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
+  handlePress() {
+    const { navigate } = this.props.navigation;
+    let user = firebase.auth().currentUser;
+    if (user != null){
+      var uid = user.uid;
+    } 
 
-        this.setState({
-            response: "Account Created"
-           
-        });
+    let ref = firebase.database().ref(uid);
+    ref.set({
+      Interest: this.mockData.value,
+    });   
 
-        alert(this.state.response);
-
-    } catch (error) {
-        this.setState({
-            response: error.toString()
-        })
-    }
-
+    let runThis = () => navigate('Biography');
+    runThis(); 
   }
 
-    render() {
-      const { navigate } = this.props.navigation;
-        return (
-          <View style={styles.container}>
-          
-            <Text style={styles.title}>INTEREST</Text>
-            <Text style={styles.title}>Choose at least 3 topics:</Text>
-            <View style={styles.CheckboxFormX} >
-              <CheckboxFormX
-                  style={{ width: 350 - 30 }}
-                  dataSource={mockData}
-                  itemShowKey="label"
-                  itemCheckedKey="RNchecked"
-                  iconSize={16}
-                  iconColor='red'
-                  formHorizontal={true}
-                  labelHorizontal={false}
-                  onChecked={(item) => this._onSelect(item)}
-              />
-            </View>
-
-            <TouchableOpacity style={styles.buttonContainer}  onPress={() => navigate('Biography')}>
-                <Text  style={styles.buttonText}>NEXT</Text>
-            </TouchableOpacity>
+  render() {
+    const { navigate } = this.props.navigation;
+      return (
+        <View style={styles.container}>
+        
+          <Text style={styles.title}>INTEREST</Text>
+          <Text style={styles.title}>Choose at least 3 topics:</Text>
+          <View style={styles.CheckboxFormX} >
+            <CheckboxFormX
+                style={{ width: 350 - 30 }}
+                dataSource={mockData}
+                itemShowKey="label"
+                itemCheckedKey="RNchecked"
+                iconSize={16}
+                iconColor='red'
+                formHorizontal={true}
+                labelHorizontal={false}
+                onChecked={(item) => this._onSelect(item)}
+            />
           </View>
-        );
+
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigate('Biography')}>
+              <Text  style={styles.buttonText}>NEXT</Text>
+          </TouchableOpacity>
+        </View>
+      );
     }
 }
 
