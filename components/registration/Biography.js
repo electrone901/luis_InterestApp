@@ -39,16 +39,24 @@ export default class BiographyScreen extends Component {
   }
 
   handlePress() {
+    const { navigate } = this.props.navigation;
     let user = firebase.auth().currentUser;
+    // console.log('currentUser all info:', user)
+    
     if (user != null){
       var uid = user.uid;
     }
+    console.log('uid is currentUser in Biography*****:', uid)
 
     let ref = firebase.database().ref(uid);
+    
     //writes data to Firebase
     ref.set({
       bio: this.state.text
-    });   
+    });
+
+    let runThis = () => navigate('ImageUpload');
+        runThis();   
   }
 
 
@@ -79,6 +87,8 @@ export default class BiographyScreen extends Component {
                  value={this.state.text}
                />
             </View>
+
+            
 
             <TouchableOpacity style={styles.buttonContainer} onPress={() => this.handlePress()} >
                 <Text  style={styles.buttonText}>NEXT</Text>

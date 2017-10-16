@@ -19,6 +19,8 @@ import { StackNavigator } from 'react-navigation';
 import * as firebase from "firebase";
 import InterestScreen from './components/registration/InterestsPage'; 
 import BiographyScreen from './components/registration/Biography'; 
+import ImageUploadScreen from './components/registration/ImageUpload'; 
+import UserWithSimilarInterestsScreen from './components/userViews/UserWithSimilarInterests'; 
 
 
 
@@ -111,6 +113,10 @@ class LoginFormScreen extends Component {
             <TouchableOpacity style={styles.buttonContainerGo}  onPress={() => navigate('Interest')}>
                 <Text  style={styles.buttonText}>GO TO INTEREST PAGE</Text>
             </TouchableOpacity>
+{/*FOR DEVELOPMENT PURPOSES*/}
+            <TouchableOpacity style={styles.buttonContainerGo}  onPress={() => navigate('similarIterests')}>
+                <Text  style={styles.buttonText}>GO TO SIMILAR ITERESTS PAGE</Text>
+            </TouchableOpacity>
       </View>
     );
   }
@@ -126,6 +132,8 @@ export const SimpleApp = StackNavigator({
   LoginForm: { screen: LoginFormScreen },
   Interest: { screen: InterestScreen },
   Biography: { screen: BiographyScreen },
+  ImageUpload: { screen: ImageUploadScreen },
+  similarIterests: { screen: UserWithSimilarInterestsScreen },
 });
 
 
