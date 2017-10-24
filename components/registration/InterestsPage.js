@@ -2,77 +2,108 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button ,StyleSheet ,StatusBar} from 'react-native';
 import CheckboxFormX from 'react-native-checkbox-form';
 import { StackNavigator } from 'react-navigation';
+import Firebase from "../login/Firebase";
+import * as firebase from "firebase";
 
 const mockData = [
     {
         label: 'Sports',
-        value: 'two'
+        value:  1
     },
     {
         label: 'Politics',
-        value: 'three'
+        value:  2
     },
     {
         label: 'Finance',
-        value: 'one'
+        value:  3
     },
     {
         label: 'Health',
-        value: 'two'
+        value:  4
     },
     {
         label: 'Tech',
-        value: 'one'
+        value:  5
     },
     //repeat
-    {
-        label: 'Sports',
-        value: 'two'
-    },
-    {
-        label: 'Politics',
-        value: 'three'
-    },
-    {
-        label: 'Finance',
-        value: 'one'
-    },
-    {
-        label: 'Health',
-        value: 'two'
-    },
-    {
-        label: 'Tech',
-        value: 'one'
-    },
-    {
-        label: 'Educat',
-        value: 'three'
-    },
+    // {
+    //     label: 'Sports1',
+    //     value: 'two'
+    // },
+    // {
+    //     label: 'Politics1',
+    //     value: 'three'
+    // },
+    // {
+    //     label: 'Finance1',
+    //     value: 'one'
+    // },
+    // {
+    //     label: 'Health1',
+    //     value: 'two'
+    // },
+    // {
+    //     label: 'Tech1',
+    //     value: 'one'
+    // },
+    // {
+    //     label: 'Educat1',
+    //     value: 'three'
+    // },
 
     
     
 ];
  
 export default class InterestsScreen extends Component {
+
+
   static navigationOptions = {
     title: 'Interest',
   };
 
-  _onSelect = ( item ) => {
+  _onSelect = (item) => {
+    
       //console.log("item CHECK:", item);
-      console.log("this.mockData.value.RNchecked:", item.RNchecked);
+      //console.log("this.mockData.value.RNchecked:", item);
+      
       // Interest1: this.mockData.value.RNchecked;
-    };
+      
+      let user = firebase.auth().currentUser;
+      let ref =  firebase.database().ref('user');
+    //   item.forEach((itemSelected) => {
+    //       if(itemSelected.RNchecked == true){
+    //       console.log('itemSelected:', itemSelected.label)
+    //     //   if(ref.get)
+    //     // //   ref.set({
+    //     // //     user: user.uid,
+    //     // //     interest: itemSelected,
+    //     // // });
+    //     //   }
+    //   })
+    item.forEach((itemSelected) => {
+        if(itemSelected.RNchecked == true ){
+         this.newArray.push(itemSelected.label)
+        }
+      
+    }
+
+    )
+    console.log(newArray + "helllo"); 
+
+};
 
   constructor(props) {
+    let newArray = [];
+    
     super(props);
     this.state = {
       email: "",
       password: "",
-      response: ""
+      Interest: [],
     };
-
+    this.newArray= this.newArray.bind(this);
     // this.signup = this.signup.bind(this);
   }
 
@@ -83,16 +114,17 @@ export default class InterestsScreen extends Component {
       var uid = user.uid;
     } 
 
-    let ref = firebase.database().ref(uid);
-    ref.set({
-      Interest: this.mockData.value,
-    });   
+    let ref = firebase.database().ref("users");
+    // ref.set({
+    //   Interest: this.state.Interest,
+    // });   
 
-    let runThis = () => navigate('Biography');
-    runThis(); 
+    // let runThis = () => navigate('Biography');
+    // runThis(); 
   }
 
   render() {
+      
     const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>
@@ -113,7 +145,7 @@ export default class InterestsScreen extends Component {
             />
           </View>
 
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigate('Biography')}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => this.handlePress()}>
               <Text  style={styles.buttonText}>NEXT</Text>
           </TouchableOpacity>
         </View>
