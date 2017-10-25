@@ -2,56 +2,30 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button ,StyleSheet ,StatusBar} from 'react-native';
 import CheckboxFormX from 'react-native-checkbox-form';
 import { StackNavigator } from 'react-navigation';
+import Firebase from "../login/Firebase";
+import * as firebase from "firebase";
 
 const mockData = [
     {
         label: 'Sports',
-        value: 'two'
+        value:  1
     },
     {
         label: 'Politics',
-        value: 'three'
+        value:  2
     },
     {
         label: 'Finance',
-        value: 'one'
+        value:  3
     },
     {
         label: 'Health',
-        value: 'two'
+        value:  4
     },
     {
         label: 'Tech',
-        value: 'one'
-    },
-    //repeat
-    {
-        label: 'Sports',
-        value: 'two'
-    },
-    {
-        label: 'Politics',
-        value: 'three'
-    },
-    {
-        label: 'Finance',
-        value: 'one'
-    },
-    {
-        label: 'Health',
-        value: 'two'
-    },
-    {
-        label: 'Tech',
-        value: 'one'
-    },
-    {
-        label: 'Educat',
-        value: 'three'
-    },
-
-    
-    
+        value:  5
+    },    
 ];
  
 export default class InterestsScreen extends Component {
@@ -59,34 +33,62 @@ export default class InterestsScreen extends Component {
     title: 'Interest',
   };
 
-  _onSelect = ( item ) => {
-      //console.log("item CHECK:", item);
-      console.log("this.mockData.value.RNchecked:", item.RNchecked);
-      // Interest1: this.mockData.value.RNchecked;
-    };
-
-  constructor(props) {
+  constructor(props) {    
     super(props);
     this.state = {
       email: "",
       password: "",
-      response: ""
-    };
-
-    // this.signup = this.signup.bind(this);
+      Interest: [],
+    }
   }
 
-  handlePress() {
-    const { navigate } = this.props.navigation;
-    let user = firebase.auth().currentUser;
-    if (user != null){
-      var uid = user.uid;
-    } 
 
-    let ref = firebase.database().ref(uid);
-    ref.set({
-      Interest: this.mockData.value,
-    });   
+onSelect = (item) => {
+   
+    // this.setState({
+    //   Interest: [],
+    // })
+    item.forEach((itemSelected) => {
+        if(itemSelected.RNchecked == true){
+         this.state.Interest.push(itemSelected.label)
+        }
+
+    })
+    console.log("helllo:", this.state.Interest); 
+};
+
+
+  handlePress() {
+    console.log("Interest in handlePress:",this.state.Interest);
+    const { navigate } = this.props.navigation;
+
+    let user = firebase.auth().currentUser;
+    let userId = user.uid;
+    let ref =  firebase.database().ref('user');
+    console.log('user:', user.uid)
+    firebase.database().ref('users/' + userId).set({
+        userName: "Potatoe",
+        interest: this.state.Interest,
+        bio: "empty",
+      });
+
+    // ref.set({
+    //   UserId : user.uid,
+    //   {
+    //   Interest : this.set.Interest,
+    //   }
+    // })
+
+
+    // let user = firebase.auth().currentUser;
+    // if (user != null){
+    //   var uid = user.uid;
+    // } 
+
+    // let ref = firebase.database().ref("users");
+    // ref.set({
+    //   Interest: this.state.Interest,
+    // });   
 
     let runThis = () => navigate('Biography');
     runThis(); 
@@ -109,11 +111,11 @@ export default class InterestsScreen extends Component {
                 iconColor='red'
                 formHorizontal={true}
                 labelHorizontal={false}
-                onChecked={(item) => this._onSelect(item)}
+                onChecked={(item) => this.onSelect(item)}
             />
           </View>
 
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigate('Biography')}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => this.handlePress()}>
               <Text  style={styles.buttonText}>NEXT</Text>
           </TouchableOpacity>
         </View>
@@ -171,6 +173,3 @@ const styles = StyleSheet.create({
     }
 
 });
-
-
-

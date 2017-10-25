@@ -8,7 +8,8 @@ class UselessTextInput extends Component {
    constructor(props) {
     super(props);
     this.state = {
-        text: ''
+        bio: '',
+        userName: ''
     };
   }
 
@@ -32,7 +33,8 @@ export default class BiographyScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        text: ''
+        bio: '',
+        userName: ''
     };
 
     this.handlePress = this.handlePress.bind(this);
@@ -51,10 +53,19 @@ export default class BiographyScreen extends Component {
     let ref = firebase.database().ref(uid);
     
     //writes data to Firebase
-    ref.set({
-      bio: this.state.text
-    });
-
+    // ref.set({
+    //   bio: this.state.text
+    // });
+    // firebase.database().ref('users/' + uid).set({
+    //   bio: this.state.text,
+    // });
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    var newPostKey = firebase.database().ref().child('users').push().key;
+    var updates = {};
+    //updates['/users/' + newPostKey] = postData;
+    updates['/users/' + uid + '/bio'] = this.state.bio;
+    updates['/users/' + uid + '/userName'] = this.state.userName;
+    firebase.database().ref().update(updates);
     let runThis = () => navigate('ImageUpload');
         runThis();   
   }
@@ -70,6 +81,25 @@ export default class BiographyScreen extends Component {
       const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
+
+          <Text style={styles.title}>Name:</Text>
+
+            <View style={{
+               backgroundColor: '#ccf0f9',
+               borderColor: '#000000',
+               borderWidth: 1,
+               height: 30,
+               borderBottomWidth: 1 }}
+             >
+               <UselessTextInput
+                 multiline = {true}
+                 numberOfLines = {4}
+                 placeholder="anonymous potatoe "
+                 onChangeText={(userName) => this.setState({userName})}
+                 value={this.state.userName}
+               />
+            </View>
+
             <Text style={styles.title}>Tell us about yourself</Text>
 
             <View style={{
@@ -83,7 +113,7 @@ export default class BiographyScreen extends Component {
                  multiline = {true}
                  numberOfLines = {4}
                  placeholder="I love hiking!"
-                 onChangeText={(text) => this.setState({text})}
+                 onChangeText={(bio) => this.setState({bio})}
                  value={this.state.text}
                />
             </View>
