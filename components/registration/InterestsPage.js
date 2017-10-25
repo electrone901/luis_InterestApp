@@ -25,106 +25,76 @@ const mockData = [
     {
         label: 'Tech',
         value:  5
-    },
-    //repeat
-    // {
-    //     label: 'Sports1',
-    //     value: 'two'
-    // },
-    // {
-    //     label: 'Politics1',
-    //     value: 'three'
-    // },
-    // {
-    //     label: 'Finance1',
-    //     value: 'one'
-    // },
-    // {
-    //     label: 'Health1',
-    //     value: 'two'
-    // },
-    // {
-    //     label: 'Tech1',
-    //     value: 'one'
-    // },
-    // {
-    //     label: 'Educat1',
-    //     value: 'three'
-    // },
-
-    
-    
+    },    
 ];
  
 export default class InterestsScreen extends Component {
-
-
   static navigationOptions = {
     title: 'Interest',
   };
 
-  _onSelect = (item) => {
-    
-      //console.log("item CHECK:", item);
-      //console.log("this.mockData.value.RNchecked:", item);
-      
-      // Interest1: this.mockData.value.RNchecked;
-      
-      let user = firebase.auth().currentUser;
-      let ref =  firebase.database().ref('user');
-    //   item.forEach((itemSelected) => {
-    //       if(itemSelected.RNchecked == true){
-    //       console.log('itemSelected:', itemSelected.label)
-    //     //   if(ref.get)
-    //     // //   ref.set({
-    //     // //     user: user.uid,
-    //     // //     interest: itemSelected,
-    //     // // });
-    //     //   }
-    //   })
-    item.forEach((itemSelected) => {
-        if(itemSelected.RNchecked == true ){
-         this.newArray.push(itemSelected.label)
-        }
-      
-    }
-
-    )
-    console.log(newArray + "helllo"); 
-
-};
-
-  constructor(props) {
-    let newArray = [];
-    
+  constructor(props) {    
     super(props);
     this.state = {
       email: "",
       password: "",
       Interest: [],
-    };
-    this.newArray= this.newArray.bind(this);
-    // this.signup = this.signup.bind(this);
+    }
   }
 
-  handlePress() {
-    const { navigate } = this.props.navigation;
-    let user = firebase.auth().currentUser;
-    if (user != null){
-      var uid = user.uid;
-    } 
 
-    let ref = firebase.database().ref("users");
+onSelect = (item) => {
+   
+    // this.setState({
+    //   Interest: [],
+    // })
+    item.forEach((itemSelected) => {
+        if(itemSelected.RNchecked == true){
+         this.state.Interest.push(itemSelected.label)
+        }
+
+    })
+    console.log("helllo:", this.state.Interest); 
+};
+
+
+  handlePress() {
+    console.log("Interest in handlePress:",this.state.Interest);
+    const { navigate } = this.props.navigation;
+
+    let user = firebase.auth().currentUser;
+    let userId = user.uid;
+    let ref =  firebase.database().ref('user');
+    console.log('user:', user.uid)
+    firebase.database().ref('users/' + userId).set({
+        userName: "Potatoe",
+        interest: this.state.Interest,
+        bio: "empty",
+      });
+
+    // ref.set({
+    //   UserId : user.uid,
+    //   {
+    //   Interest : this.set.Interest,
+    //   }
+    // })
+
+
+    // let user = firebase.auth().currentUser;
+    // if (user != null){
+    //   var uid = user.uid;
+    // } 
+
+    // let ref = firebase.database().ref("users");
     // ref.set({
     //   Interest: this.state.Interest,
     // });   
 
-    // let runThis = () => navigate('Biography');
-    // runThis(); 
+    let runThis = () => navigate('Biography');
+    runThis(); 
   }
 
   render() {
-      
     const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>
@@ -141,7 +111,7 @@ export default class InterestsScreen extends Component {
                 iconColor='red'
                 formHorizontal={true}
                 labelHorizontal={false}
-                onChecked={(item) => this._onSelect(item)}
+                onChecked={(item) => this.onSelect(item)}
             />
           </View>
 
@@ -203,6 +173,3 @@ const styles = StyleSheet.create({
     }
 
 });
-
-
-
